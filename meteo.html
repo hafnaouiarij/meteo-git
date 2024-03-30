@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Météo</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            padding-top: 100px; 
+
+        }
+        .weather-container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-cloud-sun"></i>Application Météo</a>
+            <form class="form-inline">
+                <select class="form-control mr-sm-2" id="select-country">
+                    <option value="">Sélectionner un pays</option>
+                    <option value="france">France</option>
+                    <option value="usa">États-Unis</option>
+                    <option value="spain">Espagne</option>
+                    <option value="germany">Allemagne</option>
+                    <option value="italy">Italie</option>
+                    <option value="uk">Royaume-Uni</option>
+                    <option value="canada">Canada</option>
+                    <option value="australia">Australie</option>
+                    <option value="tunisie">Tunisie</option>
+                </select>
+                <button class="btn btn-success my-2 my-sm-0" type="button" id="btn-get-weather"><i class="fas fa-temperature-high"></i> Obtenir la météo</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container weather-container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Météo Actuelle</h2>
+                        <div id="weather-info"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#btn-get-weather').click(function() {
+                var country = $('#select-country').val();
+                if (country === '') {
+                    alert('Veuillez sélectionner un pays SVP !');
+                    return;
+                }
+                var apiKey = 'votre propre clé API OpenWeatherMap'; //votre propre clé API OpenWeatherMap SVP!!
+                var apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + country + '&appid=' + apiKey + '&units=metric&lang=fr';
+                
+                $.ajax({
+                    url: apiUrl,
+                    type: 'GET',
+                    success: function(response) {
+                        var weatherData = 'Température: ' + response.main.temp + '°C<br>';
+                        weatherData += 'Description: ' + response.weather[0].description;
+                        $('#weather-info').html(weatherData);
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Erreur lors de la récupération des données météorologiques: ' + error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
